@@ -1,0 +1,5 @@
+.form-page { background: var(--surface-2); }
+.form-container { max-width: 700px; }
+.form-page-header { margin-bottom: 2rem; }
+.form-page-header h1 { margin-bottom: 0.3rem; }
+.form-page-header p { color: var(--ink-muted); font-size: 0.95rem; }

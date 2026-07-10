@@ -1,0 +1,19 @@
+.footer {
+  background: var(--ink);
+  color: rgba(255,255,255,0.7);
+  padding: 2rem 0;
+  margin-top: auto;
+}
+.footer-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; flex-wrap: wrap;
+}
+.footer-brand {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--font-display); font-size: 1.1rem;
+  font-weight: 600; color: #fff;
+}
+.footer-copy { font-size: 0.83rem; }
+.footer-links { display: flex; gap: 1.2rem; }
+.footer-links a { font-size: 0.83rem; color: rgba(255,255,255,0.6); transition: color 0.15s; }
+.footer-links a:hover { color: var(--brand); }

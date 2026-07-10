@@ -1,0 +1,11 @@
+.review-form {
+  background: var(--surface-2); border: 1.5px solid var(--border);
+  border-radius: var(--radius-md); padding: 1.4rem 1.5rem;
+}
+.review-form-title {
+  font-size: 1.05rem; font-family: var(--font-body);
+  font-weight: 600; margin-bottom: 1rem; color: var(--ink);
+}
+.star-picker { display: flex; gap: 6px; }
+.star-btn { font-size: 1.5rem; color: #d1d5db; transition: color 0.1s, transform 0.1s; }
+.star-btn:hover, .star-btn.on { color: #f59e0b; transform: scale(1.15); }

@@ -1,0 +1,53 @@
+.listing-card {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: transform 0.22s, box-shadow 0.22s;
+  cursor: pointer;
+}
+.listing-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+
+.listing-card-img-wrap {
+  position: relative;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+}
+.listing-card-img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.35s ease;
+}
+.listing-card:hover .listing-card-img { transform: scale(1.04); }
+
+.wishlist-btn {
+  position: absolute; top: 10px; right: 10px;
+  width: 34px; height: 34px; border-radius: 50%;
+  background: rgba(255,255,255,0.85); backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--ink-muted); transition: all 0.15s;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.12);
+}
+.wishlist-btn:hover { transform: scale(1.1); }
+.wishlist-btn.liked { color: var(--brand); }
+
+.listing-category-badge {
+  position: absolute; bottom: 10px; left: 10px;
+  background: rgba(255,255,255,0.92); backdrop-filter: blur(4px);
+  color: var(--ink); font-size: 0.72rem; font-weight: 600;
+  padding: 3px 10px; border-radius: 20px; text-transform: capitalize;
+  letter-spacing: 0.03em;
+}
+
+.listing-card-body { padding: 12px 14px 16px; }
+.listing-card-title {
+  font-size: 0.95rem; font-weight: 600; color: var(--ink);
+  margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  font-family: var(--font-body);
+}
+.listing-card-location {
+  font-size: 0.8rem; color: var(--ink-muted); margin-bottom: 8px;
+  display: flex; align-items: center; gap: 4px;
+}
+.listing-card-price { display: flex; align-items: baseline; gap: 3px; flex-wrap: wrap; }
+.price-amount { font-size: 1rem; font-weight: 700; color: var(--ink); }
+.price-label { font-size: 0.82rem; color: var(--ink-muted); }
+.price-tax { font-size: 0.75rem; color: var(--ink-muted); font-style: italic; }

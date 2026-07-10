@@ -1,0 +1,43 @@
+.category-bar {
+  display: flex; align-items: center; gap: 1rem;
+  border-bottom: 1px solid var(--border);
+  padding: 0 0 4px;
+  margin-bottom: 1.5rem;
+}
+.category-scroll {
+  display: flex; gap: 0.2rem; overflow-x: auto; flex: 1;
+  scrollbar-width: none; -ms-overflow-style: none; padding-bottom: 8px;
+}
+.category-scroll::-webkit-scrollbar { display: none; }
+
+.category-item {
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  padding: 8px 14px; border-radius: 8px; white-space: nowrap;
+  font-size: 0.75rem; font-weight: 500; color: var(--ink-muted);
+  transition: all 0.15s; flex-shrink: 0; min-width: 56px;
+  border-bottom: 2px solid transparent;
+}
+.category-item i { font-size: 1.1rem; }
+.category-item:hover { color: var(--ink); }
+.category-item.active {
+  color: var(--ink);
+  border-bottom-color: var(--ink);
+}
+
+/* Tax toggle */
+.tax-toggle {
+  display: flex; align-items: center; gap: 8px; cursor: pointer;
+  white-space: nowrap; font-size: 0.8rem; color: var(--ink-muted);
+  flex-shrink: 0; padding-bottom: 8px;
+}
+.toggle-track {
+  width: 38px; height: 22px; border-radius: 11px; background: var(--border);
+  position: relative; transition: background 0.2s; cursor: pointer;
+}
+.toggle-track.on { background: var(--brand); }
+.toggle-thumb {
+  width: 18px; height: 18px; border-radius: 50%; background: #fff;
+  position: absolute; top: 2px; left: 2px;
+  transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.toggle-track.on .toggle-thumb { transform: translateX(16px); }

@@ -1,0 +1,5 @@
+.search-label {
+  font-size: 0.95rem; color: var(--ink-muted);
+  margin-bottom: 1.2rem;
+}
+.search-label strong { color: var(--ink); }
