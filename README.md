@@ -1,102 +1,139 @@
-# Wanderlust – Travelers App (React + Node/Express)
+<div align="center">
+  <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1200&q=80" alt="Wanderlust Banner" width="100%" style="border-radius: 12px; margin-bottom: 20px;" />
+  
+  <h1>Wanderlust (Travelers App)</h1>
+  <p><strong>A modern, full-stack Airbnb clone built with the MERN stack.</strong></p>
 
- 
+  <p>
+    <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
+    <img src="https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js" />
+    <img src="https://img.shields.io/badge/Express.js-404D59?style=for-the-badge" alt="Express" />
+    <img src="https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB" />
+  </p>
+</div>
+
+<br />
+
+## About The Project
+
+Wanderlust is a fully-featured travel property booking platform that connects hosts with travelers. Engineered with a scalable **MERN (MongoDB, Express, React, Node.js)** architecture, it handles everything from secure session-based authentication to real-time property reservations and interactive mapping.
+
+This project was built to demonstrate proficiency in full-stack web development, API design, database modeling, and third-party API integration.
+
+### Key Features
+
+- **Robust Authentication:** Secure, session-based user authentication using **Passport.js** (Local Strategy) and `express-session`, stored persistently in MongoDB.
+- **Booking & Reservation System:** Complete end-to-end booking flow with dynamic date-range calculations (Check-in/Check-out) and total price computation including taxes.
+- **AI-Powered Descriptions:** Integrated with the **Google Gemini (Generative AI) API** to automatically generate catchy, SEO-friendly property descriptions for hosts with a single click.
+- **Interactive Geospatial Maps:** Leveraged **Mapbox GL JS** and the Mapbox Geocoding API to plot properties dynamically on interactive maps based on address input.
+- **Advanced Media Handling:** Integrated **Cloudinary** and `multer` for optimized, secure, and scalable cloud image hosting.
+- **RESTful API & Database:** Designed a robust API with Express, utilizing **Mongoose** for complex relational data modeling (Users, Listings, Reviews, Bookings).
+- **Modern Frontend UX:** Built a sleek, responsive Single Page Application (SPA) using **React (Vite)**, React Router, and a custom CSS design system. Implemented API-driven server-side pagination and real-time search filtering.
+
 ---
 
-## Project Structure
+## Tech Stack
+
+### Frontend
+- **React.js** (Bootstrapped with Vite for instant server start)
+- **React Router Dom** (Client-side routing)
+- **Context API** (Global state management)
+- **Axios** (API communication)
+- **Mapbox GL** (Interactive maps)
+- **React Hot Toast** (UX notifications)
+
+### Backend
+- **Node.js & Express.js** (REST API architecture)
+- **MongoDB & Mongoose** (NoSQL Database & Object Data Modeling)
+- **Passport.js** (Authentication & Authorization)
+- **Joi** (Server-side schema validation)
+
+### Cloud & 3rd Party Services
+- **Cloudinary** (Image storage & CDN)
+- **Mapbox API** (Forward Geocoding)
+- **Google Gemini 2.5 Flash** (Generative AI)
+
+---
+
+## Project Architecture
 
 ```
 travelers-react/
-├── backend/        ← Express REST API (Node.js)
-│   ├── server.js
-│   ├── controllers/
-│   ├── models/
-│   ├── routes/
-│   ├── middleware/
-│   ├── config/
-│   └── utils/
-└── frontend/       ← React app (Vite)
+├── backend/                  ← Express REST API
+│   ├── controllers/          # Business logic (Bookings, Listings, Users)
+│   ├── models/               # Mongoose Schemas (User, Listing, Review, Booking)
+│   ├── routes/               # API endpoints
+│   ├── middleware/           # Auth checks & Error handlers
+│   └── server.js             # Entry point & DB connection
+│
+└── frontend/                 ← React Client
     └── src/
-        ├── api/
-        ├── components/
-        ├── context/
-        └── pages/
+        ├── api/              # Axios API helper functions
+        ├── components/       # Reusable UI components (Navbar, Modals, Cards)
+        ├── context/          # React Context (AuthContext)
+        └── pages/            # View components (Home, Profile, ListingShow)
 ```
 
 ---
 
-## Setup
+## Local Setup & Installation
 
-### 1. Backend
+To run this project locally, you will need Node.js installed on your machine.
+
+### 1. Backend Setup
 
 ```bash
 cd backend
 npm install
-cp .env.example .env   # Fill in your values
-npm run dev            # Starts on http://localhost:8080
 ```
 
-**Required `.env` values:**
+Create a `.env` file in the `backend/` directory:
+```env
+ATLASDB_URL=<Your MongoDB Connection String>
+SECRET=<Your Session Secret>
+CLOUD_NAME=<Cloudinary Cloud Name>
+CLOUD_API_KEY=<Cloudinary API Key>
+CLOUD_API_SECRET=<Cloudinary API Secret>
+MAP_TOKEN=<Mapbox Public Token>
+GEMINI_API_KEY=<Google AI Studio Key>
+CLIENT_URL=http://localhost:5173
+```
 
-| Key | Where to get |
-|-----|-------------|
-| `ATLASDB_URL` | MongoDB Atlas connection string |
-| `SECRET` | Any random string for sessions |
-| `CLOUD_NAME` | Cloudinary dashboard |
-| `CLOUD_API_KEY` | Cloudinary dashboard |
-| `CLOUD_API_SECRET` | Cloudinary dashboard |
-| `MAP_TOKEN` | Mapbox account (public token) |
-| `GEMINI_API_KEY` | Google AI Studio |
-| `CLIENT_URL` | `http://localhost:5173` (for dev) |
+Start the backend server:
+```bash
+npm run dev
+# Server will start on http://localhost:8080
+```
 
-### 2. Frontend
+### 2. Frontend Setup
 
 ```bash
 cd frontend
 npm install
-cp .env.example .env   # Add your Mapbox public token
-npm run dev            # Starts on http://localhost:5173
 ```
 
-**Required `.env` value:**
-
+Create a `.env` file in the `frontend/` directory:
+```env
+VITE_MAP_TOKEN=<Your Mapbox Public Token>
 ```
-VITE_MAP_TOKEN=pk.eyJ1...   (your Mapbox PUBLIC token)
+
+Start the development server:
+```bash
+npm run dev
+# Client will start on http://localhost:5173
 ```
 
 ---
 
-## Features
+## Database Models Overview
 
-- ✅ Browse all listings with category filters
-- ✅ Search by title, location, country, category
-- ✅ View listing details with Mapbox map
-- ✅ Create / Edit / Delete listings (owner only)
-- ✅ Cloudinary image upload
-- ✅ Add / Delete reviews with star ratings
-- ✅ User auth — Sign up, Login, Logout (Passport.js)
-- ✅ ✨ AI description generator (Gemini API)
-- ✅ GST tax toggle
-- ✅ Sticky price card on listing detail
-- ✅ Mobile responsive
+- **User:** Handles authentication credentials and profile data.
+- **Listing:** Contains property details (title, price, geometry, owner reference, array of review references).
+- **Review:** Contains a rating (1-5), comment string, and author reference.
+- **Booking:** Links a `User` to a `Listing` along with `checkIn`, `checkOut`, and computed `totalPrice`.
 
 ---
 
-## API Endpoints
-
-| Method | Path | Auth | Description |
-|--------|------|------|-------------|
-| GET | `/api/listings` | — | All listings |
-| GET | `/api/listings/category/:cat` | — | Filter by category |
-| GET | `/api/listings/search?searchTerm=` | — | Search |
-| POST | `/api/listings` | ✅ | Create listing |
-| GET | `/api/listings/:id` | — | Listing detail |
-| PUT | `/api/listings/:id` | ✅ owner | Update listing |
-| DELETE | `/api/listings/:id` | ✅ owner | Delete listing |
-| POST | `/api/listings/:id/reviews` | ✅ | Add review |
-| DELETE | `/api/listings/:id/reviews/:rid` | ✅ author | Delete review |
-| POST | `/api/users/signup` | — | Register |
-| POST | `/api/users/login` | — | Login |
-| POST | `/api/users/logout` | — | Logout |
-| GET | `/api/users/me` | — | Current user |
-| POST | `/api/generate-description` | ✅ | AI description |
+<div align="center">
+  <i>If you are a recruiter reviewing this project, feel free to reach out to discuss the architecture, design decisions, or my experience building this!</i>
+</div>
