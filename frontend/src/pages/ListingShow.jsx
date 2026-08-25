@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { fetchListing, deleteListing } from '../api'
+import { fetchListing, deleteListing, createBooking } from '../api'
 import { useAuth } from '../context/AuthContext'
 import MapBox from '../components/listings/MapBox'
 import ReviewCard from '../components/reviews/ReviewCard'
 import ReviewForm from '../components/reviews/ReviewForm'
+import ConfirmModal from '../components/common/ConfirmModal'
 import toast from 'react-hot-toast'
 import './ListingShow.css'
 
@@ -16,6 +17,12 @@ export default function ListingShow() {
   const navigate = useNavigate()
   const [listing, setListing] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  
+  // Booking states
+  const [checkIn, setCheckIn] = useState('')
+  const [checkOut, setCheckOut] = useState('')
+  const [bookingLoading, setBookingLoading] = useState(false)
 
   useEffect(() => {
     fetchListing(id)
@@ -24,8 +31,8 @@ export default function ListingShow() {
       .finally(() => setLoading(false))
   }, [id])
 
-  const handleDelete = async () => {
-    if (!window.confirm('Delete this listing? This cannot be undone.')) return
+  const confirmDelete = async () => {
+    setIsDeleteModalOpen(false)
     try {
       await deleteListing(id)
       toast.success('Listing deleted')
@@ -50,6 +57,44 @@ export default function ListingShow() {
   const avgRating = listing.reviews?.length
     ? (listing.reviews.reduce((s, r) => s + r.rating, 0) / listing.reviews.length).toFixed(1)
     : null
+
+  // Calculate total days and price
+  let totalDays = 0;
+  if (checkIn && checkOut) {
+    const diff = new Date(checkOut) - new Date(checkIn);
+    totalDays = Math.ceil(diff / (1000 * 60 * 60 * 24));
+  }
+  const calculatedDays = totalDays > 0 ? totalDays : 1;
+  const basePrice = listing.price * calculatedDays;
+  const gst = Math.round(basePrice * 0.18);
+  const finalPrice = basePrice + gst;
+
+  const handleReserve = async () => {
+    if (!checkIn || !checkOut) {
+      toast.error('Please select check-in and check-out dates');
+      return;
+    }
+    if (new Date(checkOut) <= new Date(checkIn)) {
+      toast.error('Check-out must be after check-in');
+      return;
+    }
+
+    setBookingLoading(true);
+    try {
+      await createBooking({
+        listingId: listing._id,
+        checkIn,
+        checkOut,
+        totalPrice: finalPrice
+      });
+      toast.success('Booking confirmed! Check your profile.');
+      navigate('/profile');
+    } catch (err) {
+      toast.error(err.response?.data?.error || 'Failed to book');
+    } finally {
+      setBookingLoading(false);
+    }
+  }
 
   return (
     <main className="page-wrapper">
@@ -85,7 +130,7 @@ export default function ListingShow() {
               <Link to={`/listings/${id}/edit`} className="btn btn-outline btn-sm">
                 <i className="fa fa-pen" /> Edit
               </Link>
-              <button className="btn btn-danger btn-sm" onClick={handleDelete}>
+              <button className="btn btn-danger btn-sm" onClick={() => setIsDeleteModalOpen(true)}>
                 <i className="fa fa-trash" /> Delete
               </button>
             </div>
@@ -130,17 +175,27 @@ export default function ListingShow() {
                 <span className="price-big">₹{listing.price.toLocaleString('en-IN')}</span>
                 <span className="price-per">/night</span>
               </div>
+              <div className="booking-inputs" style={{display:'flex', flexDirection:'column', gap:'10px', margin:'15px 0'}}>
+                <div>
+                  <label style={{fontSize:'12px', fontWeight:'bold'}}>CHECK-IN</label>
+                  <input type="date" className="form-control" value={checkIn} onChange={e => setCheckIn(e.target.value)} min={new Date().toISOString().split('T')[0]} />
+                </div>
+                <div>
+                  <label style={{fontSize:'12px', fontWeight:'bold'}}>CHECK-OUT</label>
+                  <input type="date" className="form-control" value={checkOut} onChange={e => setCheckOut(e.target.value)} min={checkIn || new Date().toISOString().split('T')[0]} />
+                </div>
+              </div>
               <div className="price-breakdown">
-                <div className="price-row"><span>Base price</span><span>₹{listing.price.toLocaleString('en-IN')}</span></div>
-                <div className="price-row"><span>GST (18%)</span><span>₹{Math.round(listing.price * 0.18).toLocaleString('en-IN')}</span></div>
-                <div className="price-row total"><span>Total</span><span>₹{Math.round(listing.price * 1.18).toLocaleString('en-IN')}</span></div>
+                <div className="price-row"><span>₹{listing.price.toLocaleString('en-IN')} x {calculatedDays} night{calculatedDays !== 1 ? 's' : ''}</span><span>₹{basePrice.toLocaleString('en-IN')}</span></div>
+                <div className="price-row"><span>GST (18%)</span><span>₹{gst.toLocaleString('en-IN')}</span></div>
+                <div className="price-row total"><span>Total</span><span>₹{finalPrice.toLocaleString('en-IN')}</span></div>
               </div>
               {user ? (
-                <button className="btn btn-primary" style={{width:'100%',justifyContent:'center'}}>
-                  Reserve
+                <button className="btn btn-primary" onClick={handleReserve} disabled={bookingLoading} style={{width:'100%',justifyContent:'center', marginTop:'15px'}}>
+                  {bookingLoading ? 'Reserving...' : 'Reserve'}
                 </button>
               ) : (
-                <Link to="/login" className="btn btn-primary" style={{width:'100%',justifyContent:'center'}}>
+                <Link to="/login" className="btn btn-primary" style={{width:'100%',justifyContent:'center', marginTop:'15px'}}>
                   Login to Reserve
                 </Link>
               )}
@@ -183,6 +238,14 @@ export default function ListingShow() {
           )}
         </section>
       </div>
+
+      <ConfirmModal
+        isOpen={isDeleteModalOpen}
+        title="Delete Listing"
+        message="Are you sure you want to delete this listing? This action cannot be undone."
+        onConfirm={confirmDelete}
+        onCancel={() => setIsDeleteModalOpen(false)}
+      />
     </main>
   )
 }

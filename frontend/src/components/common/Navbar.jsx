@@ -62,9 +62,9 @@ export default function Navbar() {
             </>
           ) : (
             <div className="nav-user">
-              <span className="nav-username">
+              <Link to="/profile" className="nav-link" onClick={() => setMenuOpen(false)}>
                 <i className="fa fa-user-circle" /> {user.username}
-              </span>
+              </Link>
               <button className="btn btn-outline btn-sm" onClick={handleLogout}>Logout</button>
             </div>
           )}

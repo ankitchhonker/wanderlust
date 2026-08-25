@@ -6,9 +6,9 @@ const api = axios.create({
 })
 
 // Listings
-export const fetchListings = () => api.get('/listings')
-export const fetchListingsByCategory = (category) => api.get(`/listings/category/${category}`)
-export const searchListings = (term) => api.get(`/listings/search?searchTerm=${term}`)
+export const fetchListings = (page = 1) => api.get(`/listings?page=${page}`)
+export const fetchListingsByCategory = (category, page = 1) => api.get(`/listings/category/${category}?page=${page}`)
+export const searchListings = (term, page = 1) => api.get(`/listings/search?searchTerm=${term}&page=${page}`)
 export const fetchListing = (id) => api.get(`/listings/${id}`)
 export const createListing = (formData) => api.post('/listings', formData)
 export const updateListing = (id, formData) => api.put(`/listings/${id}`, formData)
@@ -26,5 +26,9 @@ export const getMe = () => api.get('/users/me')
 
 // AI
 export const generateDescription = (data) => api.post('/generate-description', data)
+
+// Bookings
+export const createBooking = (data) => api.post('/bookings', data)
+export const fetchMyBookings = () => api.get('/bookings/me')
 
 export default api

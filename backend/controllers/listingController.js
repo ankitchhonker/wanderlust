@@ -1,18 +1,36 @@
 const Listings = require("../models/listing");
 
 module.exports.index = async (req, res) => {
-  const allListings = await Listings.find({});
-  res.json({ listings: allListings });
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 12;
+  const skip = (page - 1) * limit;
+
+  const allListings = await Listings.find({}).skip(skip).limit(limit);
+  const total = await Listings.countDocuments({});
+  const totalPages = Math.ceil(total / limit);
+
+  res.json({ listings: allListings, page, totalPages, total });
 };
 
 module.exports.getByCategory = async (req, res) => {
   const { category } = req.params;
-  const allListings = await Listings.find({ category });
-  res.json({ listings: allListings });
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 12;
+  const skip = (page - 1) * limit;
+
+  const allListings = await Listings.find({ category }).skip(skip).limit(limit);
+  const total = await Listings.countDocuments({ category });
+  const totalPages = Math.ceil(total / limit);
+
+  res.json({ listings: allListings, page, totalPages, total });
 };
 
 module.exports.search = async (req, res) => {
   const { searchTerm } = req.query;
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 12;
+  const skip = (page - 1) * limit;
+
   const query = {
     $or: [
       { title: new RegExp(searchTerm, "i") },
@@ -22,8 +40,12 @@ module.exports.search = async (req, res) => {
       { description: new RegExp(searchTerm, "i") },
     ],
   };
-  const allListings = await Listings.find(query);
-  res.json({ listings: allListings });
+  
+  const allListings = await Listings.find(query).skip(skip).limit(limit);
+  const total = await Listings.countDocuments(query);
+  const totalPages = Math.ceil(total / limit);
+
+  res.json({ listings: allListings, page, totalPages, total });
 };
 
 module.exports.createListing = async (req, res) => {

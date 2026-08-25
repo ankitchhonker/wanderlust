@@ -7,6 +7,7 @@ import NewListing from './pages/NewListing'
 import EditListing from './pages/EditListing'
 import Login from './pages/Login'
 import SignUp from './pages/SignUp'
+import Profile from './pages/Profile'
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
         <Route path="/listings/new" element={<NewListing />} />
         <Route path="/listings/:id" element={<ListingShow />} />
         <Route path="/listings/:id/edit" element={<EditListing />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
       </Routes>

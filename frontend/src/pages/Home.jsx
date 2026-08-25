@@ -10,24 +10,47 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
   const [category, setCategory] = useState('')
   const [showTax, setShowTax] = useState(false)
+  const [page, setPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
   const [searchParams] = useSearchParams()
   const searchTerm = searchParams.get('search')
+
+  // Reset page to 1 when search term changes
+  useEffect(() => {
+    setPage(1)
+  }, [searchTerm])
 
   useEffect(() => {
     setLoading(true)
     const fetch = searchTerm
-      ? searchListings(searchTerm)
+      ? searchListings(searchTerm, page)
       : category
-        ? fetchListingsByCategory(category)
-        : fetchListings()
+        ? fetchListingsByCategory(category, page)
+        : fetchListings(page)
 
     fetch
-      .then(res => setListings(res.data.listings))
+      .then(res => {
+        setListings(res.data.listings)
+        setTotalPages(res.data.totalPages || 1)
+      })
       .catch(() => setListings([]))
       .finally(() => setLoading(false))
-  }, [category, searchTerm])
+  }, [category, searchTerm, page])
 
-  const handleCategory = (val) => setCategory(val)
+  const handleCategory = (val) => {
+    if (category !== val) {
+      setCategory(val)
+      setPage(1)
+    }
+  }
+
+  const handleNextPage = () => {
+    if (page < totalPages) setPage(p => p + 1)
+  }
+
+  const handlePrevPage = () => {
+    if (page > 1) setPage(p => p - 1)
+  }
 
   return (
     <main className="page-wrapper">
@@ -35,7 +58,6 @@ export default function Home() {
         {searchTerm && (
           <p className="search-label">
             <i className="fa fa-search" /> Results for "<strong>{searchTerm}</strong>"
-            &nbsp;— {listings.length} found
           </p>
         )}
         <CategoryFilter
@@ -53,11 +75,35 @@ export default function Home() {
             <p>No listings found. Try a different search or category.</p>
           </div>
         ) : (
-          <div className="listings-grid">
-            {listings.map(l => (
-              <ListingCard key={l._id} listing={l} showTax={showTax} />
-            ))}
-          </div>
+          <>
+            <div className="listings-grid">
+              {listings.map(l => (
+                <ListingCard key={l._id} listing={l} showTax={showTax} />
+              ))}
+            </div>
+
+            {totalPages > 0 && (
+              <div className="pagination-wrap">
+                <button 
+                  className="btn btn-outline" 
+                  onClick={handlePrevPage} 
+                  disabled={page === 1}
+                >
+                  <i className="fa fa-chevron-left" /> Previous
+                </button>
+                <span className="pagination-info">
+                  Page {page} of {totalPages}
+                </span>
+                <button 
+                  className="btn btn-outline" 
+                  onClick={handleNextPage} 
+                  disabled={page >= totalPages}
+                >
+                  Next <i className="fa fa-chevron-right" />
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </main>

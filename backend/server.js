@@ -16,6 +16,7 @@ const User = require("./models/user.js");
 const listingRoutes = require("./routes/listing.js");
 const reviewRoutes = require("./routes/review.js");
 const userRoutes = require("./routes/user.js");
+const bookingRoutes = require("./routes/booking.js");
 const aiRoutes = require("./routes/generateDescription.js");
 
 const app = express();
@@ -70,6 +71,7 @@ passport.deserializeUser(User.deserializeUser());
 app.use("/api/listings", listingRoutes);
 app.use("/api/listings/:id/reviews", reviewRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/bookings", bookingRoutes);
 app.use("/api/generate-description", aiRoutes);
 
 // Health check

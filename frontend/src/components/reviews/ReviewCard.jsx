@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { useAuth } from '../../context/AuthContext'
 import { deleteReview } from '../../api'
+import ConfirmModal from '../common/ConfirmModal'
 import toast from 'react-hot-toast'
 import './ReviewCard.css'
 
@@ -16,9 +18,10 @@ function Stars({ rating }) {
 export default function ReviewCard({ review, listingId, onDelete }) {
   const { user } = useAuth()
   const canDelete = user && review.author?._id === user._id
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
-  const handleDelete = async () => {
-    if (!window.confirm('Delete this review?')) return
+  const confirmDelete = async () => {
+    setIsDeleteModalOpen(false)
     try {
       await deleteReview(listingId, review._id)
       toast.success('Review deleted')
@@ -41,10 +44,18 @@ export default function ReviewCard({ review, listingId, onDelete }) {
       </div>
       <p className="review-comment">{review.comment}</p>
       {canDelete && (
-        <button className="review-delete-btn" onClick={handleDelete}>
+        <button className="review-delete-btn" onClick={() => setIsDeleteModalOpen(true)}>
           <i className="fa-solid fa-trash" /> Delete
         </button>
       )}
+
+      <ConfirmModal
+        isOpen={isDeleteModalOpen}
+        title="Delete Review"
+        message="Are you sure you want to delete this review? This action cannot be undone."
+        onConfirm={confirmDelete}
+        onCancel={() => setIsDeleteModalOpen(false)}
+      />
     </div>
   )
 }
