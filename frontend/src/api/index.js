@@ -1,7 +1,8 @@
 import axios from 'axios'
 
+//axios instance ... 
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_API_URL || '/api',
   withCredentials: true,
 })
 
@@ -23,6 +24,8 @@ export const signUp = (data) => api.post('/users/signup', data)
 export const login = (data) => api.post('/users/login', data)
 export const logout = () => api.post('/users/logout')
 export const getMe = () => api.get('/users/me')
+export const toggleWatchlist = (listingId) => api.post(`/users/watchlist/${listingId}`)
+export const fetchWatchlist = () => api.get('/users/watchlist')
 
 // AI
 export const generateDescription = (data) => api.post('/generate-description', data)

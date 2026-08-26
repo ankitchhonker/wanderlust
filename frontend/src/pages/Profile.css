@@ -201,3 +201,35 @@
   font-weight: 700;
   font-size: 18px;
 }
+
+.profile-tabs {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #ebebeb;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  font-weight: 600;
+  color: #717171;
+  padding: 8px 0;
+  cursor: pointer;
+  position: relative;
+}
+
+.tab-btn.active {
+  color: var(--ink);
+}
+
+.tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--ink);
+}

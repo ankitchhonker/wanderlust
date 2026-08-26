@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { fetchListing, deleteListing, createBooking } from '../api'
+import { fetchListing, deleteListing, createBooking, toggleWatchlist } from '../api'
 import { useAuth } from '../context/AuthContext'
 import MapBox from '../components/listings/MapBox'
 import ReviewCard from '../components/reviews/ReviewCard'
@@ -13,7 +13,7 @@ const FALLBACK = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w
 
 export default function ListingShow() {
   const { id } = useParams()
-  const { user } = useAuth()
+  const { user, setUser } = useAuth()
   const navigate = useNavigate()
   const [listing, setListing] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -23,6 +23,22 @@ export default function ListingShow() {
   const [checkIn, setCheckIn] = useState('')
   const [checkOut, setCheckOut] = useState('')
   const [bookingLoading, setBookingLoading] = useState(false)
+
+  const isLiked = user?.watchlist?.includes(id)
+
+  const handleToggleWatchlist = async () => {
+    if (!user) {
+      toast.error('You must log in to save listings')
+      return
+    }
+    try {
+      const res = await toggleWatchlist(id)
+      setUser(prev => ({ ...prev, watchlist: res.data.watchlist }))
+      toast.success(res.data.message)
+    } catch (err) {
+      toast.error('Failed to update watchlist')
+    }
+  }
 
   useEffect(() => {
     fetchListing(id)
@@ -125,16 +141,28 @@ export default function ListingShow() {
               <span className="badge badge-brand">{listing.category}</span>
             </div>
           </div>
-          {isOwner && (
-            <div className="show-actions">
-              <Link to={`/listings/${id}/edit`} className="btn btn-outline btn-sm">
-                <i className="fa fa-pen" /> Edit
-              </Link>
-              <button className="btn btn-danger btn-sm" onClick={() => setIsDeleteModalOpen(true)}>
-                <i className="fa fa-trash" /> Delete
-              </button>
-            </div>
-          )}
+          <div className="show-actions-wrap" style={{display: 'flex', gap: '10px', alignItems: 'center'}}>
+            <button 
+              className="btn btn-outline btn-sm" 
+              onClick={handleToggleWatchlist} 
+              style={{
+                borderColor: isLiked ? 'var(--brand)' : 'var(--border)', 
+                color: isLiked ? 'var(--brand)' : 'var(--ink)'
+              }}
+            >
+              <i className={`fa-heart ${isLiked ? 'fa-solid' : 'fa-regular'}`} /> {isLiked ? 'Saved' : 'Save'}
+            </button>
+            {isOwner && (
+              <>
+                <Link to={`/listings/${id}/edit`} className="btn btn-outline btn-sm">
+                  <i className="fa fa-pen" /> Edit
+                </Link>
+                <button className="btn btn-danger btn-sm" onClick={() => setIsDeleteModalOpen(true)}>
+                  <i className="fa fa-trash" /> Delete
+                </button>
+              </>
+            )}
+          </div>
         </div>
 
         {/* Hero image */}

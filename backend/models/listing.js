@@ -8,6 +8,7 @@ const listSchema = new Schema({
   price: { type: Number, required: true },
   location: { type: String, required: true },
   country: { type: String, required: true },
+  watchlist:[{type:Schema.Types.ObjectId, ref:"Watchlist"}],
   reviews: [{ type: Schema.Types.ObjectId, ref: "Reviews" }],
   owner: { type: Schema.Types.ObjectId, ref: "User" },
   geometry: {
