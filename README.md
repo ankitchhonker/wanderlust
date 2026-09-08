@@ -29,6 +29,7 @@ This project was built to demonstrate proficiency in full-stack web development,
 - **Advanced Media Handling:** Integrated **Cloudinary** and `multer` for optimized, secure, and scalable cloud image hosting.
 - **RESTful API & Database:** Designed a robust API with Express, utilizing **Mongoose** for complex relational data modeling (Users, Listings, Reviews, Bookings).
 - **Modern Frontend UX:** Built a sleek, responsive Single Page Application (SPA) using **React (Vite)**, React Router, and a custom CSS design system. Implemented API-driven server-side pagination and real-time search filtering.
+- Optimize API for getting faster response.
 
 ---
 
