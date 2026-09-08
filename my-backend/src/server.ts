@@ -8,11 +8,13 @@ import {Request, Response, NextFunction} from "express";
 const app = express();
 const PORT = process.env.PORT;
 const url = process.env.ATLASDB_URL as string;
+import dns from "node:dns";  
+dns.setServers(["1.1.1.1", "1.0.0.1"]);
 
 //middlewares
 app.use(express.json());
 app.use("/api/listing",listingRoutes);
-app.use("/api/signup",authRoutes);
+app.use("/api/auth",authRoutes);
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     const statusCode = err.statusCode || 500;
