@@ -1,9 +1,15 @@
 import { Router } from "express";
-import createListingController from "../controllers/listing.controller";
+import {createListingController, getListingByIdController, getListingController} from "../controllers/listing.controller";
 import { verifyToken } from "../middleware/auth.middleware";
-const router = Router()
+import { createReviewController } from "../controllers/review.controller";
+import { upload } from "../config/cloudinary";
+const router = Router({ mergeParams: true });
 
-router.post("/",verifyToken, createListingController);
+router.post("/:id/review",verifyToken, createReviewController)
+router.get("/:id",getListingByIdController);
+router.post("/new",verifyToken,upload.single('listing[image]'), createListingController);
+router.get("/",getListingController);
+
 
 
 export default router;

@@ -5,6 +5,10 @@ export const listingSchema = Joi.object({
     price:       Joi.number().required(),
     location:    Joi.string().required(),
     country:     Joi.string().required(),
-    category:    Joi.string().required()
+    category:    Joi.string().required(),
+    image: Joi.object({
+    url: Joi.string().required(),
+    filename: Joi.string().required()
+}).optional()
 });
 

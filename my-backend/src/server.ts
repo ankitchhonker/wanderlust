@@ -14,6 +14,7 @@ dns.setServers(["1.1.1.1", "1.0.0.1"]);
 //middlewares
 app.use(express.json());
 app.use("/api/listing",listingRoutes);
+ 
 app.use("/api/auth",authRoutes);
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {

@@ -32,3 +32,5 @@ export async function loginServive(data:any){
 );
     return {token};
 }
+
+

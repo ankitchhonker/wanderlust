@@ -22,7 +22,13 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
+    "@types/multer": "^2.2.0",
     "@types/node": "^26.4.0",
+    "cloudinary": "^1.41.3",
+    "install": "^0.13.0",
+    "multer": "^2.3.0",
+    "multer-storage-cloudinary": "^4.0.0",
+    "npm": "^11.19.1",
     "ts-node": "^10.9.2",
     "typescript": "^7.0.2"
   }
